@@ -1,0 +1,7 @@
+# VRSN Pharma LLP — https://www.vrsnpharma.com/
+# Everything on this site is public and crawlable.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://www.vrsnpharma.com/sitemap.xml
