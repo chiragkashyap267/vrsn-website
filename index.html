@@ -2291,18 +2291,43 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  /* RFQ form — client-side only.
-     TODO before launch: wire this to a real endpoint (Formspree / Web3Forms /
-     your own backend or CRM) so enquiries actually reach the sales team. */
+  /* RFQ form — sends enquiry data to the business WhatsApp number via wa.me */
   const rfqForm = document.getElementById('rfqForm');
   if (rfqForm) {
     rfqForm.addEventListener('submit', (e) => {
       e.preventDefault();
+
+      const company     = rfqForm.querySelector('#company').value.trim();
+      const contact     = rfqForm.querySelector('#contactPerson').value.trim();
+      const email       = rfqForm.querySelector('#email').value.trim();
+      const phone       = rfqForm.querySelector('#phone').value.trim();
+      const location    = rfqForm.querySelector('#country').value.trim();
+      const buyerType   = rfqForm.querySelector('#buyerType').value.trim();
+      const requirement = rfqForm.querySelector('#requirement').value.trim();
+
+      const message = [
+        '🏢 *New Bulk Enquiry — VRSN Pharma*',
+        '',
+        '*Company:* '      + company,
+        '*Contact:* '      + contact,
+        '*Email:* '        + email,
+        '*Phone/WA:* '     + phone,
+        '*Location:* '     + location,
+        '*Buyer Type:* '   + buyerType,
+        '*Requirement:* '  + (requirement || 'Not specified'),
+      ].join('\n');
+
+      const waNumber = '918417815005';
+      const waUrl = 'https://wa.me/' + waNumber + '?text=' + encodeURIComponent(message);
+
       const btn = rfqForm.querySelector('button[type="submit"]');
       const originalLabel = btn.textContent;
-      btn.textContent = 'Enquiry Received ✓';
+      btn.textContent = 'Opening WhatsApp…';
       btn.style.opacity = '0.85';
       btn.disabled = true;
+
+      window.open(waUrl, '_blank', 'noopener,noreferrer');
+
       setTimeout(() => {
         btn.textContent = originalLabel;
         btn.style.opacity = '1';
